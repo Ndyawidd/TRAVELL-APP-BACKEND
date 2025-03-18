@@ -38,6 +38,7 @@ model Destination {
   location      String
   category      String
   description   String
+  tickets        Ticket[] 
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -46,3 +47,14 @@ model Destination {
 }
 
 
+model Ticket {
+  ticketId       Int      @id @default(autoincrement())
+  destinationId  Int
+  price          Decimal
+  capacity       Int
+  available      Int
+  schedule       DateTime
+  destination    Destination @relation(fields: [destinationId], references: [destinationId], onDelete: Cascade)
+
+  @@map("tickets")
+}

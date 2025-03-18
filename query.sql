@@ -13,6 +13,15 @@ CREATE TABLE users (
 INSERT INTO users (name, email, username, password, role)
 VALUES ('Nadya', 'nadya@example.com', 'nadyaw', 'hashed_password', 'USER');
 
+-- UPDATE (PUT) TEMPLATE
+-- {
+--   "name": "Najla Updated",
+--   "email": "najla.updated@example.com",
+--   "username": "najlawUpdated",
+--   "password": "newsecurepassword",
+--   "role": "ADMIN"
+-- }
+
 
 -- Destination
 CREATE TABLE destinations (
@@ -28,4 +37,36 @@ CREATE TABLE destinations (
 INSERT INTO destinations (name, location, category, description) 
 VALUES 
 ('Bali Beach', 'Bali, Indonesia', 'Beach', 'Beautiful beach with clear blue water.');
+
+-- ADD (CREATE) TEMPLATE
+-- {
+--   "name": "Pantai Kuta",
+--   "location": "Bali, Indonesia",
+--   "category": "Nature",
+--   "description": "Pantai dengan pasir putih dan ombak yang indah"
+-- }
+
+
+-- tickets
+CREATE TABLE tickets (
+    ticketId INT AUTO_INCREMENT PRIMARY KEY,
+    destinationId INT NOT NULL,
+    price DECIMAL(10,2) NOT NULL,
+    capacity INT NOT NULL,
+    available INT NOT NULL,
+    schedule DATETIME NOT NULL,
+    FOREIGN KEY (destinationId) REFERENCES destinations(destinationId) ON DELETE CASCADE
+);
+
+INSERT INTO tickets (destinationId, price, capacity, available, schedule)
+VALUES (1, 50000, 50, 50, '2025-04-01 10:00:00');
+
+-- ADD TEMPLATE
+-- {
+--   "destinationId": 1,
+--   "price": 250000,
+--   "capacity": 50,
+--   "available": 50,
+--   "schedule": "2025-03-20T08:00:00.000Z"
+-- }
 
