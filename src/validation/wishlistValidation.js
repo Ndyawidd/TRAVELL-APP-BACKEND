@@ -1,0 +1,13 @@
+import Joi from "joi";
+
+const wishlistCreateSchema = Joi.object({
+  userId: Joi.number().integer().positive().required(),
+  destinationId: Joi.number().integer().positive().required(),
+});
+
+const wishlistUpdateSchema = Joi.object({
+  userId: Joi.number().integer().positive(),
+  destinationId: Joi.number().integer().positive(),
+});
+
+export { wishlistCreateSchema, wishlistUpdateSchema };

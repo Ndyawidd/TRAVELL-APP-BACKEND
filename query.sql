@@ -94,5 +94,14 @@ VALUES (1, 1, 2, 500000, 'PENDING');
 --    "paymentStatus": "PAID"
 -- }
 
+-- wishlists
+CREATE TABLE wishlists (
+    wishlistId    INT AUTO_INCREMENT PRIMARY KEY,
+    userId        INT NOT NULL,
+    destinationId INT NOT NULL,
+    FOREIGN KEY (userId) REFERENCES users(userId) ON DELETE CASCADE,
+    FOREIGN KEY (destinationId) REFERENCES destinations(destinationId) ON DELETE CASCADE
+);
 
-
+INSERT INTO wishlists (userId, destinationId) 
+VALUES (1, 1);

@@ -4,6 +4,7 @@ import userRoutes from "./routes/UserRoutes.js";
 import destinationRoutes from "./routes/DestinationRoutes.js";
 import ticketRoutes from "./routes/TicketRoutes.js";
 import orderRoutes from "./routes/OrderRoutes.js";
+import wishlistRoutes from "./routes/wishlistRoutes.js";
 
 dotenv.config();
 const app = express();
@@ -13,6 +14,7 @@ app.use("/users", userRoutes); // Routing user
 app.use("/destinations", destinationRoutes);
 app.use("/tickets", ticketRoutes);
 app.use("/orders", orderRoutes);
+app.use("/wishlists", wishlistRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

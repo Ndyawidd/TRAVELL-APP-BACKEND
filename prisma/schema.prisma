@@ -20,12 +20,12 @@ model User {
   username String @unique
   password String
   role     Role   @default(USER)
+  orders        Order[]
+  wishlists     Wishlist[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  orders        Order[]
-
+ 
   @@map("users") 
 }
 
@@ -40,7 +40,8 @@ model Destination {
   location      String
   category      String
   description   String
-  tickets        Ticket[] 
+  tickets       Ticket[]
+  wishlists     Wishlist[] 
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -81,4 +82,14 @@ enum PaymentStatus {
   PENDING
   PAID
   CANCELLED
+}
+
+model Wishlist {
+  wishlistId    Int     @id @default(autoincrement())
+  userId        Int
+  destinationId Int
+  user          User     @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  destination   Destination @relation(fields: [destinationId], references: [destinationId], onDelete: Cascade)
+
+  @@map("wishlists")
 }
