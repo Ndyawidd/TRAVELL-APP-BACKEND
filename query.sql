@@ -70,3 +70,29 @@ VALUES (1, 50000, 50, 50, '2025-04-01 10:00:00');
 --   "schedule": "2025-03-20T08:00:00.000Z"
 -- }
 
+-- orders
+CREATE TABLE orders (
+    orderId        INT AUTO_INCREMENT PRIMARY KEY,
+    userId        INT NOT NULL,
+    ticketId      INT NOT NULL,
+    quantity      INT NOT NULL,
+    totalPrice    DECIMAL(10,2) NOT NULL,
+    paymentStatus ENUM('PENDING', 'PAID', 'CANCELLED') DEFAULT 'PENDING',
+    FOREIGN KEY (userId) REFERENCES users(userId) ON DELETE CASCADE,
+    FOREIGN KEY (ticketId) REFERENCES tickets(ticketId) ON DELETE CASCADE
+);
+
+INSERT INTO orders (userId, ticketId, quantity, totalPrice, paymentStatus) 
+VALUES (1, 1, 2, 500000, 'PENDING');
+
+-- ADD TEMPLATE
+-- {
+--    "userId": 1,
+--    "ticketId": 1,
+--    "quantity": 3,
+--    "totalPrice": 150000,
+--    "paymentStatus": "PAID"
+-- }
+
+
+

@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import userRoutes from "./routes/UserRoutes.js";
 import destinationRoutes from "./routes/DestinationRoutes.js";
 import ticketRoutes from "./routes/TicketRoutes.js";
+import orderRoutes from "./routes/OrderRoutes.js";
 
 dotenv.config();
 const app = express();
@@ -11,6 +12,7 @@ app.use(express.json()); // Middleware untuk membaca JSON
 app.use("/users", userRoutes); // Routing user
 app.use("/destinations", destinationRoutes);
 app.use("/tickets", ticketRoutes);
+app.use("/orders", orderRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
