@@ -22,6 +22,8 @@ model User {
   role     Role   @default(USER)
   orders        Order[]
   wishlists     Wishlist[]
+  reviews       Review[]
+  responses     AdminResponse[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -41,7 +43,8 @@ model Destination {
   category      String
   description   String
   tickets       Ticket[]
-  wishlists     Wishlist[] 
+  wishlists     Wishlist[]
+  reviews       Review[] 
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -92,4 +95,30 @@ model Wishlist {
   destination   Destination @relation(fields: [destinationId], references: [destinationId], onDelete: Cascade)
 
   @@map("wishlists")
+}
+
+model Review {
+  reviewId      Int    @id @default(autoincrement())
+  userId        Int
+  destinationId Int
+  rating        Int
+  comment       String
+  user          User   @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  destination   Destination @relation(fields: [destinationId], references: [destinationId], onDelete: Cascade)
+  responses     AdminResponse[]
+
+  @@map("reviews")
+}
+
+model AdminResponse {
+  responseId  Int     @id @default(autoincrement())
+  reviewId    Int     @unique
+  userId      Int
+  response    String  @db.Text
+  createdAt   DateTime @default(now())
+
+  review Review @relation(fields: [reviewId], references: [reviewId], onDelete: Cascade)
+  admin  User   @relation(fields: [userId], references: [userId], onDelete: Cascade)
+
+  @@map("responses")
 }

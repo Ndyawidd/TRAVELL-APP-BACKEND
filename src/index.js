@@ -5,6 +5,8 @@ import destinationRoutes from "./routes/DestinationRoutes.js";
 import ticketRoutes from "./routes/TicketRoutes.js";
 import orderRoutes from "./routes/OrderRoutes.js";
 import wishlistRoutes from "./routes/wishlistRoutes.js";
+import reviewRoutes from "./routes/ReviewRoutes.js";
+import responseRoutes from "./routes/ResponseRoutes.js";
 
 dotenv.config();
 const app = express();
@@ -15,6 +17,8 @@ app.use("/destinations", destinationRoutes);
 app.use("/tickets", ticketRoutes);
 app.use("/orders", orderRoutes);
 app.use("/wishlists", wishlistRoutes);
+app.use("/reviews", reviewRoutes);
+app.use("/responses", responseRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

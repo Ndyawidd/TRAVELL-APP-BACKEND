@@ -105,3 +105,40 @@ CREATE TABLE wishlists (
 
 INSERT INTO wishlists (userId, destinationId) 
 VALUES (1, 1);
+
+-- reviews
+CREATE TABLE reviews (
+    reviewId      INT AUTO_INCREMENT PRIMARY KEY,
+    userId        INT NOT NULL,
+    destinationId INT NOT NULL,
+    rating        INT CHECK (rating BETWEEN 1 AND 5),
+    comment       VARCHAR(500) NOT NULL,
+    FOREIGN KEY (userId) REFERENCES users(userId) ON DELETE CASCADE,
+    FOREIGN KEY (destinationId) REFERENCES destinations(destinationId) ON DELETE CASCADE
+);
+
+INSERT INTO reviews (userId, destinationId, rating, comment) 
+VALUES (1, 1, 5, 'Tempatnya bagus banget, worth it!');
+
+-- ADD REVIEWS
+-- {
+--         "userId": 3,
+--         "destinationId": 1,
+--         "rating": 4,
+--         "comment": "seru banget liburan disini, next time mau kesini lagi ah"
+-- }
+
+-- ADMIN RESPONSE
+CREATE TABLE responses (
+    responseId    INT AUTO_INCREMENT PRIMARY KEY,
+    reviewId      INT NOT NULL,
+    userId        INT NOT NULL,
+    response      TEXT NOT NULL,
+    createdAt     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (reviewId) REFERENCES reviews(reviewId) ON DELETE CASCADE,
+    FOREIGN KEY (userId) REFERENCES users(userId) ON DELETE CASCADE
+);
+
+INSERT INTO responses (reviewId, userId, response) 
+VALUES (2, 3, 'Terimakasih atas ulasannya');
+

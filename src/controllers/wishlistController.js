@@ -9,7 +9,7 @@ import {
   deleteWishlist,
 } from "../services/wishlistServices.js";
 
-// ✅ Create Wishlist
+// Create Wishlist
 export const addWishlist = async (req, res) => {
   try {
     const { error } = wishlistCreateSchema.validate(req.body);
@@ -25,7 +25,7 @@ export const addWishlist = async (req, res) => {
   }
 };
 
-// ✅ Get All Wishlists
+// Get All Wishlists
 export const getWishlists = async (req, res) => {
   try {
     const wishlists = await getAllWishlists();
@@ -35,7 +35,7 @@ export const getWishlists = async (req, res) => {
   }
 };
 
-// ✅ Get Wishlist By ID
+// Get Wishlist By ID
 export const findWishlistById = async (req, res) => {
   try {
     const wishlist = await getWishlistById(req.params.id);
@@ -48,7 +48,7 @@ export const findWishlistById = async (req, res) => {
   }
 };
 
-// ✅ Delete Wishlist
+// Delete Wishlist
 export const removeWishlist = async (req, res) => {
   try {
     await deleteWishlist(req.params.id);
