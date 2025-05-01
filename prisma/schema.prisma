@@ -36,31 +36,19 @@ enum Role {
   USER
 }
 
-model Destination {
-  destinationId Int     @id @default(autoincrement())
-  name          String
-  location      String
-  category      String
-  description   String
-  tickets       Ticket[]
-  wishlists     Wishlist[]
-  reviews       Review[] 
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("destinations")
-}
-
 
 model Ticket {
-  ticketId       Int      @id @default(autoincrement())
-  destinationId  Int
-  price          Decimal
-  capacity       Int
-  available      Int
-  schedule       DateTime
-  destination    Destination @relation(fields: [destinationId], references: [destinationId], onDelete: Cascade)
+  ticketId          Int     @id @default(autoincrement())
+  name        String
+  price       Int
+  capacity    Int
+  description String
+  image       String @db.LongText 
+  location    String
+  latitude    Float
+  longitude   Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   orders        Order[]
 
@@ -68,18 +56,29 @@ model Ticket {
 }
 
 model Order {
-  orderId       Int     @id @default(autoincrement())
+  orderId       String         @id
   userId        Int
   ticketId      Int
   quantity      Int
   totalPrice    Decimal
-  paymentStatus PaymentStatus  @default(PENDING)
+  status        OrderStatus    @default(PENDING)
 
-  user          User    @relation(fields: [userId], references: [userId], onDelete: Cascade)
-  ticket        Ticket  @relation(fields: [ticketId], references: [ticketId], onDelete: Cascade)
+  user          User           @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  ticket        Ticket         @relation(fields: [ticketId], references: [ticketId], onDelete: Cascade)
+
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
 
   @@map("orders")
 }
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+}
+
+
 
 enum PaymentStatus {
   PENDING
@@ -90,9 +89,7 @@ enum PaymentStatus {
 model Wishlist {
   wishlistId    Int     @id @default(autoincrement())
   userId        Int
-  destinationId Int
   user          User     @relation(fields: [userId], references: [userId], onDelete: Cascade)
-  destination   Destination @relation(fields: [destinationId], references: [destinationId], onDelete: Cascade)
 
   @@map("wishlists")
 }
@@ -100,11 +97,9 @@ model Wishlist {
 model Review {
   reviewId      Int    @id @default(autoincrement())
   userId        Int
-  destinationId Int
   rating        Int
   comment       String
   user          User   @relation(fields: [userId], references: [userId], onDelete: Cascade)
-  destination   Destination @relation(fields: [destinationId], references: [destinationId], onDelete: Cascade)
   responses     AdminResponse[]
 
   @@map("reviews")

@@ -11,8 +11,9 @@ const router = express.Router();
 
 router.post("/", registerOrder);
 router.get("/", getOrders);
-router.get("/:id", getOrder);
-router.put("/:id", editOrder);
-router.delete("/:id", removeOrder);
+// router.get("/user/:userId", getOrdersByUser);
+router.get("/:orderId", getOrder);
+router.put("/:orderId", editOrder);
+router.delete("/:orderId", removeOrder);
 
 export default router;
