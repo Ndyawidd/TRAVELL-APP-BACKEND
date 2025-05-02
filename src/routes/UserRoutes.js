@@ -1,6 +1,5 @@
 import express from "express";
 import {
-  registerUser,
   getUsers,
   getUser,
   editUser,
@@ -9,7 +8,6 @@ import {
 
 const router = express.Router();
 
-router.post("/register", registerUser); // Create
 router.get("/", getUsers); // Read all
 router.get("/:id", getUser); // Read by ID
 router.put("/:id", editUser); // Update

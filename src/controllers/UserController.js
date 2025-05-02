@@ -1,16 +1,12 @@
 import { validateSchema } from "../utils/validator/validator.js";
-import { userCreateSchema, userUpdateSchema } from "../validation/UserValidation.js";
-import { createUser, getAllUsers, getUserById, updateUser, deleteUser } from "../services/UserServices.js";
-
-const registerUser = async (req, res) => {
-  try {
-    const validatedData = validateSchema(userCreateSchema, req.body);
-    const newUser = await createUser(validatedData);
-    res.status(201).json({ message: "User registered successfully!", data: newUser });
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-};
+import { userUpdateSchema } from "../validation/UserValidation.js";
+import {
+  getAllUsers,
+  getUserById,
+  updateUser,
+  deleteUser,
+} from "../services/UserServices.js";
+import bcrypt from "bcrypt";
 
 const getUsers = async (req, res) => {
   try {
@@ -34,7 +30,14 @@ const getUser = async (req, res) => {
 const editUser = async (req, res) => {
   try {
     const validatedData = validateSchema(userUpdateSchema, req.body);
+
+    // 🔒 Jika user mengirim password, hash terlebih dahulu
+    if (validatedData.password) {
+      validatedData.password = await bcrypt.hash(validatedData.password, 10);
+    }
+
     const updatedUser = await updateUser(req.params.id, validatedData);
+
     res.json({ message: "User updated successfully", data: updatedUser });
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -50,4 +53,4 @@ const removeUser = async (req, res) => {
   }
 };
 
-export { registerUser, getUsers, getUser, editUser, removeUser };
+export { getUsers, getUser, editUser, removeUser };

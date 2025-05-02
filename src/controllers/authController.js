@@ -33,7 +33,7 @@ export const loginUser = async (req, res) => {
 };
 
 export const handleRegister = async (req, res) => {
-  const { name, email, username, password } = req.body;
+  const { name, email, username, password, role } = req.body;
 
   try {
     // Cek apakah username sudah dipakai
@@ -50,11 +50,19 @@ export const handleRegister = async (req, res) => {
       email,
       username,
       password: hashedPassword,
-      role: "USER",
+      role: role || "USER",
     });
 
     const { password: _, ...userWithoutPassword } = newUser;
     res.status(201).json(userWithoutPassword);
+
+    console.log("🚀 Saving user with data:", {
+      name,
+      email,
+      username,
+      password,
+      role,
+    });
   } catch (err) {
     console.error("Register error:", err);
     res.status(500).json({ error: "Terjadi kesalahan saat register" });

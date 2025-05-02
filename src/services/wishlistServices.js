@@ -1,29 +1,33 @@
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
+export const createWishlist = async (userId, ticketId) => {
+  const exists = await prisma.wishlist.findFirst({
+    where: { userId, ticketId },
+  });
 
-// Create Wishlist
-export const createWishlist = async (data) => {
-  return await prisma.wishlist.create({ data });
+  if (exists) throw new Error("Already in wishlist");
+
+  return await prisma.wishlist.create({
+    data: { userId, ticketId },
+  });
 };
 
-// Get All Wishlists
 export const getAllWishlists = async () => {
   return await prisma.wishlist.findMany({
-    include: { user: true, destination: true },
+    include: { ticket: true, user: true },
   });
 };
 
-// Get Wishlist By ID
-export const getWishlistById = async (wishlistId) => {
-  return await prisma.wishlist.findUnique({
-    where: { wishlistId: Number(wishlistId) },
+export const getWishlistByUserId = async (userId) => {
+  return await prisma.wishlist.findMany({
+    where: { userId },
+    include: { ticket: true },
   });
 };
 
-// Delete Wishlist
-export const deleteWishlist = async (wishlistId) => {
-  return await prisma.wishlist.delete({
-    where: { wishlistId: Number(wishlistId) },
+export const deleteWishlistByUserAndTicket = async (userId, ticketId) => {
+  return await prisma.wishlist.deleteMany({
+    where: { userId, ticketId },
   });
 };

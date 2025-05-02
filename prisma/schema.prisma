@@ -19,7 +19,10 @@ model User {
   email    String @unique
   username String @unique
   password String
+  image    String?  @db.LongText 
+  balance  Int     @default(0)
   role     Role   @default(USER)
+
   orders        Order[]
   wishlists     Wishlist[]
   reviews       Review[]
@@ -51,6 +54,7 @@ model Ticket {
   updatedAt DateTime @updatedAt
 
   orders        Order[]
+  wishlists        Wishlist[]
 
   @@map("tickets")
 }
@@ -78,8 +82,6 @@ enum OrderStatus {
   CANCELLED
 }
 
-
-
 enum PaymentStatus {
   PENDING
   PAID
@@ -89,7 +91,9 @@ enum PaymentStatus {
 model Wishlist {
   wishlistId    Int     @id @default(autoincrement())
   userId        Int
+  ticketId      Int
   user          User     @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  ticket        Ticket         @relation(fields: [ticketId], references: [ticketId], onDelete: Cascade)
 
   @@map("wishlists")
 }
