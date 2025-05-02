@@ -115,4 +115,33 @@ const removeOrder = async (req, res) => {
   }
 };
 
-export { registerOrder, getOrders, getOrder, editOrder, removeOrder };
+const getOrdersByUser = async (req, res) => {
+  try {
+    const userId = parseInt(req.params.userId);
+
+    const orders = await prisma.order.findMany({
+      where: { userId },
+      include: {
+        ticket: true, // agar bisa ambil nama tiket, harga, dll
+        user: true, // opsional, kalau mau data user juga
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    res.json(orders);
+  } catch (error) {
+    console.error("Error fetching orders by user:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+export {
+  registerOrder,
+  getOrders,
+  getOrder,
+  editOrder,
+  removeOrder,
+  getOrdersByUser,
+};

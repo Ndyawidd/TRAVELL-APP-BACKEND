@@ -66,6 +66,7 @@ model Order {
   quantity      Int
   totalPrice    Decimal
   status        OrderStatus    @default(PENDING)
+  date          DateTime
 
   user          User           @relation(fields: [userId], references: [userId], onDelete: Cascade)
   ticket        Ticket         @relation(fields: [ticketId], references: [ticketId], onDelete: Cascade)

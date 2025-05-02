@@ -38,3 +38,14 @@ export const deleteOrder = async (id) => {
   });
 };
 
+export const findByUserId = async (userId) => {
+  return await prisma.order.findMany({
+    where: { userId },
+    include: {
+      ticket: true, // supaya bisa akses ticket.name, ticket.image, dst.
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+};
