@@ -22,7 +22,7 @@ app.use("/users", userRoutes); // Routing user
 app.use("/tickets", ticketRoutes);
 app.use("/orders", orderRoutes);
 app.use("/wishlists", wishlistRoutes);
-// app.use("/reviews", reviewRoutes);
+app.use("/reviews", reviewRoutes);
 // app.use("/responses", responseRoutes);
 
 const PORT = process.env.PORT || 5000;

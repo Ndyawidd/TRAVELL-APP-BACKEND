@@ -26,7 +26,6 @@ model User {
   orders        Order[]
   wishlists     Wishlist[]
   reviews       Review[]
-  responses     AdminResponse[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -55,6 +54,7 @@ model Ticket {
 
   orders        Order[]
   wishlists        Wishlist[]
+  reviews       Review[]
 
   @@map("tickets")
 }
@@ -74,6 +74,8 @@ model Order {
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
 
+  reviews       Review[]
+
   @@map("orders")
 }
 
@@ -83,42 +85,42 @@ enum OrderStatus {
   CANCELLED
 }
 
-enum PaymentStatus {
-  PENDING
-  PAID
-  CANCELLED
-}
-
 model Wishlist {
   wishlistId    Int     @id @default(autoincrement())
   userId        Int
   ticketId      Int
   user          User     @relation(fields: [userId], references: [userId], onDelete: Cascade)
-  ticket        Ticket         @relation(fields: [ticketId], references: [ticketId], onDelete: Cascade)
+  ticket        Ticket   @relation(fields: [ticketId], references: [ticketId], onDelete: Cascade)
 
+  @@unique([userId, ticketId])
   @@map("wishlists")
 }
+
 
 model Review {
   reviewId      Int    @id @default(autoincrement())
   userId        Int
+  ticketId      Int
+  orderId       String
   rating        Int
   comment       String
+  image       String @db.LongText 
+
   user          User   @relation(fields: [userId], references: [userId], onDelete: Cascade)
-  responses     AdminResponse[]
+  ticket        Ticket         @relation(fields: [ticketId], references: [ticketId], onDelete: Cascade)
+  order         Order          @relation(fields: [orderId], references: [orderId], onDelete: Cascade)
+
+  responses     Response[]
 
   @@map("reviews")
 }
 
-model AdminResponse {
-  responseId  Int     @id @default(autoincrement())
-  reviewId    Int     @unique
-  userId      Int
-  response    String  @db.Text
-  createdAt   DateTime @default(now())
-
-  review Review @relation(fields: [reviewId], references: [reviewId], onDelete: Cascade)
-  admin  User   @relation(fields: [userId], references: [userId], onDelete: Cascade)
-
+model Response {
+  responseId    Int      @id @default(autoincrement())
+  reviewId      Int
+  response      String   @db.Text
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  review        Review   @relation(fields: [reviewId], references: [reviewId], onDelete: Cascade)
   @@map("responses")
 }
