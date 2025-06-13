@@ -1,9 +1,14 @@
 import { prisma } from "../config/database.js";
 
 export const getUserByUsername = async (username) => {
-  return await prisma.user.findUnique({
-    where: { username },
-  });
+  try {
+    return await prisma.user.findUnique({
+      where: { username },
+    });
+  } catch (error) {
+    console.error("🔥 Error in getUserByUsername:", error);
+    throw error;
+  }
 };
 
 export const registerUser = async ({

@@ -1,7 +1,12 @@
 import { prisma } from "../config/database.js";
 
-export const createTicket = async (data) => {
-  return await prisma.ticket.create({ data });
+export const createTicket = async (data, image) => {
+  return await prisma.ticket.create({
+    data: {
+      ...data,
+      image,
+    },
+  });
 };
 
 export const getAllTickets = async () => {

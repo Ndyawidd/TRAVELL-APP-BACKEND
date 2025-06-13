@@ -11,11 +11,12 @@ import {
   removeResponse,
   modifyResponse,
 } from "../controllers/ReviewController.js";
-
+import multer from "multer";
+const upload = multer({ storage: multer.memoryStorage() });
 const router = express.Router();
 
 // Review Routes
-router.post("/", addReview); // Create a new review
+router.post("/", upload.single("image"), addReview); // Create a new review
 router.get("/", getReviews); // Get all reviews
 router.get("/ticket/:ticketId", fetchReviewsByTicketId); // Get reviews by ticket ID
 router.get("/:reviewId", findReviewById); // Get a review by ID

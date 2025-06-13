@@ -1,3 +1,4 @@
+import { validateSchema } from "../utils/validator/validator.js";
 import {
   reviewCreateSchema,
   reviewUpdateSchema,
@@ -13,25 +14,35 @@ import {
   deleteResponse,
   updateResponse,
 } from "../services/ReviewServices.js";
+import { uploadImageToFirebase } from "../config/firebase.js";
 
 // Create Review
 export const addReview = async (req, res) => {
   try {
-    const { error } = reviewCreateSchema.validate(req.body);
-    if (error) {
-      return res.status(400).json({ error: error.details[0].message });
+    console.log("Create Review - REQ.BODY:", req.body);
+    console.log("Create Review - REQ.FILE:", req.file);
+
+    const validatedData = validateSchema(reviewCreateSchema, req.body);
+
+    let image = null;
+    if (req.file) {
+      try {
+        image = await uploadImageToFirebase(req.file);
+        console.log("Image uploaded successfully:", image);
+      } catch (uploadError) {
+        console.error("Image upload failed:", uploadError);
+        return res.status(400).json({
+          error: `Gagal upload gambar: ${uploadError.message}`,
+        });
+      }
     }
 
-    const { userId, orderId, ticketId, rating, comment, image } = req.body;
-    const newReview = await createReview({
-      userId: Number(userId),
-      orderId,
-      ticketId: Number(ticketId),
-      rating: Number(rating),
-      comment,
-      image,
+    const newReview = await createReview(validatedData, image);
+
+    res.status(201).json({
+      message: "Review created successfully!",
+      data: newReview,
     });
-    res.status(201).json(newReview);
   } catch (error) {
     console.error("Error creating review:", error);
     res.status(500).json({ error: "Failed to create review" });

@@ -9,7 +9,7 @@ export const createReview = async (data) => {
       userId,
       orderId,
       ticketId,
-      rating,
+      rating: Number(rating),
       comment,
       image,
     },

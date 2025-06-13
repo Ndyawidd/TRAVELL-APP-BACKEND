@@ -7,6 +7,7 @@ import {
   deleteUser,
 } from "../services/UserServices.js";
 import bcrypt from "bcrypt";
+import { uploadImageToFirebase } from "../config/firebase.js";
 
 const getUsers = async (req, res) => {
   try {
@@ -29,11 +30,27 @@ const getUser = async (req, res) => {
 
 const editUser = async (req, res) => {
   try {
+    console.log("Create Review - REQ.BODY:", req.body);
+    console.log("Create Review - REQ.FILE:", req.file);
     const validatedData = validateSchema(userUpdateSchema, req.body);
 
-    // 🔒 Jika user mengirim password, hash terlebih dahulu
+    // Jika user mengirim password, hash terlebih dahulu
     if (validatedData.password) {
       validatedData.password = await bcrypt.hash(validatedData.password, 10);
+    }
+
+    //image to firebase
+    let image = null;
+    if (req.file) {
+      try {
+        image = await uploadImageToFirebase(req.file);
+        console.log("Image uploaded successfully:", image);
+      } catch (uploadError) {
+        console.error("Image upload failed:", uploadError);
+        return res.status(400).json({
+          error: `Gagal upload gambar: ${uploadError.message}`,
+        });
+      }
     }
 
     const updatedUser = await updateUser(req.params.id, validatedData);
