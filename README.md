@@ -14,6 +14,9 @@ di CMD:
 npx prisma generate
 npx prisma db push
 
+Third :
+add file "firebase-travelapp-sdk.json" di config
+
 {
 "type": "service_account",
 "project_id": "travel-app-44ad0",
