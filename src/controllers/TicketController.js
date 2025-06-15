@@ -69,6 +69,7 @@ const getSingleTicket = async (req, res) => {
   }
 };
 
+
 const editTicket = async (req, res) => {
   try {
     console.log("Edit Ticket - REQ.BODY:", req.body);
@@ -121,10 +122,45 @@ const removeTicket = async (req, res) => {
   }
 };
 
+const updateTicketCapacityController = async (req, res) => {
+  try {
+    const ticketId = req.params.id; // Get ID from URL params
+    const { capacity } = req.body; // Get capacity from request body
+
+    console.log(`Backend: Received PATCH /tickets/${ticketId}/capacity with body:`, req.body); // DEBUG
+
+    // Basic validation for capacity
+    if (typeof capacity !== 'number' || !Number.isInteger(capacity) || capacity < 0) {
+      console.error(`Backend: Invalid capacity value received: ${capacity}`); // DEBUG
+      return res.status(400).json({ error: 'Invalid capacity value. Must be a non-negative integer.' });
+    }
+
+    // Call the generic updateTicket service function with specific data
+    const updatedTicket = await updateTicket(ticketId, { capacity: capacity }); //
+
+    if (!updatedTicket) {
+      console.error(`Backend: Ticket not found or update failed for ID: ${ticketId}`); // DEBUG
+      return res.status(404).json({ error: 'Ticket not found or update failed.' });
+    }
+
+    res.status(200).json({
+      message: `Ticket ${ticketId} capacity updated successfully to ${capacity}.`,
+      data: updatedTicket,
+    });
+  } catch (error) {
+    console.error("Backend: Update Ticket Capacity Error:", error); // DEBUG
+    res.status(500).json({
+      error: "Failed to update ticket capacity.",
+      details: error.message,
+    });
+  }
+};
+
 export {
   createNewTicket,
   getAllTicketsList,
   getSingleTicket,
   editTicket,
   removeTicket,
+  updateTicketCapacityController,
 };

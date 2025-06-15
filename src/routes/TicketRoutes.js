@@ -5,6 +5,7 @@ import {
   getSingleTicket,
   editTicket,
   removeTicket,
+  updateTicketCapacityController,
 } from "../controllers/TicketController.js";
 // import upload from "../middleware/upload.js";
 import multer from "multer";
@@ -18,7 +19,8 @@ router.put("/:id", upload.single("image"), editTicket);
 // router.post("/", createNewTicket);
 router.get("/", getAllTicketsList);
 router.get("/:id", getSingleTicket);
-// router.put("/:id", editTicket);
+router.put("/:id", editTicket);
 router.delete("/:id", removeTicket);
+router.patch("/:id/capacity", updateTicketCapacityController);
 
 export default router;
